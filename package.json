@@ -6,9 +6,10 @@
   },
   "devDependencies": {
     "pulp": "^12.2.0",
-    "purescript-psa": "^0.5.0",
     "purescript": "^0.12.0",
-    "rimraf": "^2.5.4"
+    "purescript-psa": "^0.5.0",
+    "rimraf": "^2.5.4",
+    "xhr2": "^0.1.4"
   },
   "dependencies": {
     "webidl2": "^2.3.0"
