@@ -1,7 +1,14 @@
 {
   "name": "purescript-webidl",
-  "moduleType": ["node"],
-  "ignore": ["**/.*", "node_modules", "bower_components", "output"],
+  "moduleType": [
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "output"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
