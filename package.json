@@ -12,6 +12,6 @@
     "xhr2": "^0.1.4"
   },
   "dependencies": {
-    "webidl2": "^2.3.0"
+    "webidl2": "^15.0.0"
   }
 }
