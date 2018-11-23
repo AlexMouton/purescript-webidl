@@ -437,7 +437,7 @@ type RecNodeNamespace =
 type RecNodeCallback =
   { type :: StringLiteral "callback"
   , name :: String
-  , idlType :: IdlType
+  , idlType :: RecIdlTypeReturn 
   , arguments :: Array Argument
   , trivia :: RecTrivia
   , extAttrs :: Maybe RecExtendedAttributes
