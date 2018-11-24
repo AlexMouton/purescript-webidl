@@ -65,7 +65,21 @@ type RecExtendedAttributes =
   , trivia :: RecTrivia
   }
 
-type RecIdlTypeArgument =
+type RecIdlTypeArgumentCons =
+  { type :: StringLiteral "argument-type"
+  , idlType :: Array ArgumentType
+  , baseName :: Maybe String
+  , generic :: Maybe {value :: String, trivia :: RecTrivia}
+  , nullable :: Maybe {trivia :: String}
+  , union :: Boolean
+  , prefix :: Maybe {value :: String, trivia :: String}
+  , postfix :: Maybe {value :: String, trivia :: String}
+  , separator :: Maybe {value :: String, trivia :: String}
+  , extAttrs :: Maybe RecExtendedAttributes
+  , trivia :: RecTrivia
+  }
+
+type RecIdlTypeArgumentStr =
   { type :: StringLiteral "argument-type"
   , idlType :: String
   , baseName :: Maybe String
@@ -78,6 +92,17 @@ type RecIdlTypeArgument =
   , extAttrs :: Maybe RecExtendedAttributes
   , trivia :: RecTrivia
   }
+
+data ArgumentType = ArgumentTypeCons RecIdlTypeArgumentCons | ArgumentTypeStr RecIdlTypeArgumentStr
+
+derive instance genericArgumentType :: Generic ArgumentType _
+instance showArgumentType :: Show ArgumentType where
+  show x = genericShow x
+
+instance readForeignArgumentType :: JSON.ReadForeign ArgumentType where
+  readImpl f = ArgumentTypeStr <$> JSON.read' f
+    <|> ArgumentTypeCons <$> JSON.read' f
+
 
 type RecIdlTypeReturn =
   { type :: StringLiteral "return-type"
@@ -168,15 +193,16 @@ type RecIdlTypeDictionary =
   }
 
 data IdlType
-  = ArgumentType RecIdlTypeArgument
-  | ReturnType RecIdlTypeReturn
-  | AttributeTypeStr RecIdlTypeAttributeStr
-  | AttributeTypeCons RecIdlTypeAttributeCons
-  | ConstType RecIdlTypeConst
-  | UnionType RecIdlTypeUnion
-  | GenericType { idlType :: Array IdlType }
-  | DictionaryType RecIdlTypeDictionary
-  | NullableType RecIdlTypeNull
+  = IdlTypeArgumentStr RecIdlTypeArgumentStr
+  | IdlTypeArgumentCons RecIdlTypeArgumentCons
+  | IdlTypeReturn RecIdlTypeReturn
+  | IdlTypeAttributeStr RecIdlTypeAttributeStr
+  | IdlTypeAttributeCons RecIdlTypeAttributeCons
+  | IdlTypeConst RecIdlTypeConst
+  | IdlTypeUnion RecIdlTypeUnion
+  | IdlTypeGeneric { idlType :: Array IdlType }
+  | IdlTypeDictionary RecIdlTypeDictionary
+  | IdlTypeNullable RecIdlTypeNull
 
 derive instance genericType :: Generic IdlType _
 
@@ -186,36 +212,37 @@ instance showType :: Show IdlType where
 instance readForeignType :: JSON.ReadForeign IdlType where
   readImpl f = do
     -- nullable <- readBoolean =<< index f "nullable"
-    ty <- ArgumentType <$> JSON.read' f
-      <|> ReturnType <$> JSON.read' f
-      <|> AttributeTypeStr <$> JSON.read' f
-      <|> AttributeTypeCons <$> JSON.read' f
-      <|> ConstType <$> JSON.read' f
-      <|> UnionType <$> JSON.read' f
-      <|> DictionaryType <$> JSON.read' f
-      <|> NullableType <$> JSON.read' f
-      <|> GenericType <$> JSON.read' f
+    ty <- IdlTypeArgumentStr <$> JSON.read' f
+      <|> IdlTypeArgumentCons <$> JSON.read' f
+      <|> IdlTypeReturn <$> JSON.read' f
+      <|> IdlTypeAttributeStr <$> JSON.read' f
+      <|> IdlTypeAttributeCons <$> JSON.read' f
+      <|> IdlTypeConst <$> JSON.read' f
+      <|> IdlTypeUnion <$> JSON.read' f
+      <|> IdlTypeDictionary <$> JSON.read' f
+      <|> IdlTypeNullable <$> JSON.read' f
+      <|> IdlTypeGeneric <$> JSON.read' f
     pure ty
     -- pure $ if nullable then NullableType ty else ty
-
 
 type RecArgument =
   { name :: String
   , escapedName :: String
-  , idlType :: IdlType
+  , idlType :: ArgumentType
   , optional :: Maybe { trivia :: String } --Maybe Boolean
   , default :: Maybe Rv
   , variadic :: Maybe { trivia :: String }
   }
-newtype Argument = Argument RecArgument
-derive instance newtypeArgument :: Newtype Argument _
+
+data Argument = Argument RecArgument
 
 derive instance genericArgument :: Generic Argument _
+
 instance showArgument :: Show Argument where
   show x = genericShow x
 
 instance readForeignArgument :: JSON.ReadForeign Argument where
-  readImpl = map wrap <<< JSON.read'
+  readImpl f = Argument <$> JSON.read' f
 
 type RecMemberIterable =
   { type :: StringLiteral "iterable"
