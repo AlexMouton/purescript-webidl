@@ -385,19 +385,19 @@ type RecMemberField =
   }
 
 data Member
-  = IterableMember RecMemberIterable
-  | MaplikeMember RecMemberMaplike
-  | SetlikeMember RecMemberSetlike
-  | OperationMemberGetter RecMemberOperationGetter
-  | OperationMemberSetter RecMemberOperationSetter
-  | OperationMemberDeleter RecMemberOperationDeleter
-  | OperationMemberStatic RecMemberOperationStatic
-  | OperationMemberStringifier RecMemberOperationStringifier
-  | OperationMemberBase RecMemberOperationBase
-  | AttributeMember RecMemberAttribute
-  | ConstantMember RecMemberConstant
-  | FieldMember RecMemberField
-  | OtherMember String
+  = MemberIterable RecMemberIterable
+  | MemberMaplike RecMemberMaplike
+  | MemberSetlike RecMemberSetlike
+  | MemberOperationGetter RecMemberOperationGetter
+  | MemberOperationSetter RecMemberOperationSetter
+  | MemberOperationDeleter RecMemberOperationDeleter
+  | MemberOperationStatic RecMemberOperationStatic
+  | MemberOperationStringifier RecMemberOperationStringifier
+  | MemberOperationBase RecMemberOperationBase
+  | MemberAttribute RecMemberAttribute
+  | MemberConstant RecMemberConstant
+  | MemberField RecMemberField
+  | MemberOther String
 
 derive instance genericMember :: Generic Member _
 
