@@ -501,15 +501,15 @@ type RecNodeEnum =
   }
 
 data Node
-  = InterfaceNode RecNodeInterface
-  | ImplementsNode RecNodeImplements
-  | TypeDefNode RecNodeTypeDef
-  | NamespaceNode RecNodeNamespace
-  | CallbackNode RecNodeCallback
-  | DictionaryNode RecNodeDictionary
-  | ExceptionNode RecNodeException
-  | EnumNode RecNodeEnum
-  | OtherNode String
+  = NodeInterface RecNodeInterface
+  | NodeImplements RecNodeImplements
+  | NodeTypeDef RecNodeTypeDef
+  | NodeNamespace RecNodeNamespace
+  | NodeCallback RecNodeCallback
+  | NodeDictionary RecNodeDictionary
+  | NodeException RecNodeException
+  | NodeEnum RecNodeEnum
+  | NodeOther String
 
 derive instance genericNode :: Generic Node _
 
@@ -523,14 +523,14 @@ readNode :: Foreign -> F Node
 readNode f = do
   _type <- readString =<< index f "type"
   case _type of
-    "interface" -> InterfaceNode <$> JSON.read' f
-    "implements" -> ImplementsNode <$> JSON.read' f
-    "typedef" -> TypeDefNode <$> JSON.read' f
-    "callback" -> CallbackNode <$> JSON.read' f
-    "dictionary" -> DictionaryNode <$> JSON.read' f
-    "exception" -> ExceptionNode <$> JSON.read' f
-    "enum" -> EnumNode <$> JSON.read' f
-    _ -> pure $ OtherNode _type
+    "interface" -> NodeInterface <$> JSON.read' f
+    "implements" -> NodeImplements <$> JSON.read' f
+    "typedef" -> NodeTypeDef <$> JSON.read' f
+    "callback" -> NodeCallback <$> JSON.read' f
+    "dictionary" -> NodeDictionary <$> JSON.read' f
+    "exception" -> NodeException <$> JSON.read' f
+    "enum" -> NodeEnum <$> JSON.read' f
+    _ -> pure $ NodeOther _type
 
 
 foreign import parseImpl ::
