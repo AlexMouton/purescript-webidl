@@ -432,6 +432,16 @@ type RecNodeInterface =
   , extAttrs :: Maybe RecExtendedAttributes
   }
 
+type RecNodeInterfaceMixin =
+  { type :: StringLiteral "interface mixin"
+  , name :: String
+  , escapedName :: String
+  , partial :: Maybe { trivia :: String }
+  , members :: Array Member
+  , trivia :: RecTrivia
+  , extAttrs :: Maybe RecExtendedAttributes
+  }
+
 type RecNodeImplements =
   { target          :: String
   , implements      :: String
@@ -502,6 +512,7 @@ type RecNodeEnum =
 
 data Node
   = NodeInterface RecNodeInterface
+  | NodeInterfaceMixin RecNodeInterfaceMixin
   | NodeImplements RecNodeImplements
   | NodeTypeDef RecNodeTypeDef
   | NodeNamespace RecNodeNamespace
@@ -524,6 +535,7 @@ readNode f = do
   _type <- readString =<< index f "type"
   case _type of
     "interface" -> NodeInterface <$> JSON.read' f
+    "interface mixin" -> NodeInterfaceMixin <$> JSON.read' f
     "implements" -> NodeImplements <$> JSON.read' f
     "typedef" -> NodeTypeDef <$> JSON.read' f
     "callback" -> NodeCallback <$> JSON.read' f
