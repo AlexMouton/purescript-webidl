@@ -406,18 +406,18 @@ instance showMember :: Show Member where
 
 instance readForeignMember :: JSON.ReadForeign Member where
   readImpl f =
-    IterableMember <$> JSON.read' f
-    <|> MaplikeMember<$> JSON.read' f
-    <|> SetlikeMember<$> JSON.read' f
-    <|> OperationMemberGetter <$> JSON.read' f
-    <|> OperationMemberSetter <$> JSON.read' f
-    <|> OperationMemberDeleter <$> JSON.read' f
-    <|> OperationMemberStatic <$> JSON.read' f
-    <|> OperationMemberStringifier <$> JSON.read' f
-    <|> OperationMemberBase <$> JSON.read' f
-    <|> AttributeMember <$> JSON.read' f
-    <|> ConstantMember <$> JSON.read' f
-    <|> FieldMember <$> JSON.read' f
+    MemberIterable <$> JSON.read' f
+    <|> MemberMaplike<$> JSON.read' f
+    <|> MemberSetlike<$> JSON.read' f
+    <|> MemberOperationGetter <$> JSON.read' f
+    <|> MemberOperationSetter <$> JSON.read' f
+    <|> MemberOperationDeleter <$> JSON.read' f
+    <|> MemberOperationStatic <$> JSON.read' f
+    <|> MemberOperationStringifier <$> JSON.read' f
+    <|> MemberOperationBase <$> JSON.read' f
+    <|> MemberAttribute <$> JSON.read' f
+    <|> MemberConstant <$> JSON.read' f
+    <|> MemberField <$> JSON.read' f
 
 -- | A node represented as a PureScript data type.
 
