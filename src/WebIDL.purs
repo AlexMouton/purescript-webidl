@@ -248,7 +248,7 @@ instance readForeignArgument :: JSON.ReadForeign Argument where
 
 type RecMemberIterable =
   { type :: StringLiteral "iterable"
-  , idlType :: Array  IdlType
+  , idlType :: Array IdlType
   , readOnly :: Maybe Boolean
   , trivia :: RecTrivia
   , extAttrs :: Maybe RecExtendedAttributes
@@ -256,7 +256,7 @@ type RecMemberIterable =
 
 type RecMemberMaplike =
   { type :: StringLiteral "maplike"
-  , idlType :: Array  IdlType
+  , idlType :: Array IdlType
   , readOnly :: Maybe Boolean
   , trivia :: RecTrivia
   , extAttrs :: Maybe RecExtendedAttributes
@@ -264,11 +264,12 @@ type RecMemberMaplike =
 
 type RecMemberSetlike =
   { type :: StringLiteral "setlike"
-  , idlType :: Array  IdlType
+  , idlType :: Array IdlType
   , readOnly :: Maybe Boolean
   , trivia :: RecTrivia
   , extAttrs :: Maybe RecExtendedAttributes
   }
+
 type RecMemberOperationBase =
   { type :: StringLiteral "operation"
   , trivia :: RecTrivia
