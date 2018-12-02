@@ -93,16 +93,6 @@ type RecIdlTypeArgumentStr =
   , trivia :: RecTrivia
   }
 
-data ArgumentType = ArgumentTypeCons RecIdlTypeArgumentCons | ArgumentTypeStr RecIdlTypeArgumentStr
-
-derive instance genericArgumentType :: Generic ArgumentType _
-instance showArgumentType :: Show ArgumentType where
-  show x = genericShow x
-
-instance readForeignArgumentType :: JSON.ReadForeign ArgumentType where
-  readImpl f = ArgumentTypeStr <$> JSON.read' f
-    <|> ArgumentTypeCons <$> JSON.read' f
-
 
 type RecIdlTypeReturn =
   { type :: StringLiteral "return-type"
@@ -224,6 +214,18 @@ instance readForeignType :: JSON.ReadForeign IdlType where
       <|> IdlTypeGeneric <$> JSON.read' f
     pure ty
     -- pure $ if nullable then NullableType ty else ty
+
+
+data ArgumentType = ArgumentTypeCons RecIdlTypeArgumentCons | ArgumentTypeStr RecIdlTypeArgumentStr
+
+derive instance genericArgumentType :: Generic ArgumentType _
+instance showArgumentType :: Show ArgumentType where
+  show x = genericShow x
+
+instance readForeignArgumentType :: JSON.ReadForeign ArgumentType where
+  readImpl f = ArgumentTypeStr <$> JSON.read' f
+    <|> ArgumentTypeCons <$> JSON.read' f
+
 
 type RecArgument =
   { name :: String
