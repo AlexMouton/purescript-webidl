@@ -65,76 +65,55 @@ type RecExtendedAttributes =
   , trivia :: RecTrivia
   }
 
+
+
 type RecIdlTypeArgumentCons =
-  { type :: StringLiteral "argument-type"
+  RecIdlTypeCore
+  ( type :: StringLiteral "argument-type"
   , idlType :: Array ArgumentType
-  , baseName :: Maybe String
-  , generic :: Maybe {value :: String, trivia :: RecTrivia}
-  , nullable :: Maybe {trivia :: String}
-  , union :: Boolean
-  , prefix :: Maybe {value :: String, trivia :: String}
-  , postfix :: Maybe {value :: String, trivia :: String}
-  , separator :: Maybe {value :: String, trivia :: String}
-  , extAttrs :: Maybe RecExtendedAttributes
-  , trivia :: RecTrivia
-  }
+  )
 
 type RecIdlTypeArgumentStr =
-  { type :: StringLiteral "argument-type"
+  RecIdlTypeCore
+  ( type :: StringLiteral "argument-type"
   , idlType :: String
-  , baseName :: Maybe String
-  , generic :: Maybe {value :: String, trivia :: RecTrivia}
-  , nullable :: Maybe {trivia :: String}
-  , union :: Boolean
-  , prefix :: Maybe {value :: String, trivia :: String}
+  )
+
+type RecIdlTypeTail r =
+  { prefix :: Maybe {value :: String, trivia :: String}
   , postfix :: Maybe {value :: String, trivia :: String}
   , separator :: Maybe {value :: String, trivia :: String}
   , extAttrs :: Maybe RecExtendedAttributes
   , trivia :: RecTrivia
+  | r
   }
 
+type RecIdlTypeCore r =
+  RecIdlTypeTail
+  ( generic :: Maybe {value :: String, trivia :: RecTrivia}
+  , nullable :: Maybe {trivia :: String}
+  , union :: Maybe (BooleanLiteral TB.False)
+  , baseName :: Maybe String
+  | r
+  )
 
 type RecIdlTypeReturn =
-  { type :: StringLiteral "return-type"
-  , generic :: Maybe {value :: String, trivia :: RecTrivia}
-  , nullable :: Maybe {trivia :: String}
-  , union :: Boolean
+  RecIdlTypeCore
+  ( type :: StringLiteral "return-type"
   , idlType :: String
-  , baseName :: Maybe String
-  , prefix :: Maybe {value :: String, trivia :: String}
-  , postfix :: Maybe {value :: String, trivia :: String}
-  , separator :: Maybe {value :: String, trivia :: String}
-  , extAttrs :: Maybe RecExtendedAttributes
-  , trivia :: RecTrivia
-  }
+  )
 
 type RecIdlTypeAttributeStr =
-  { type :: StringLiteral "attribute-type"
-  , generic :: Maybe {value :: String, trivia :: RecTrivia}
-  , nullable :: Maybe {trivia :: String}
-  , union :: Maybe Boolean
+  RecIdlTypeCore
+  ( type :: StringLiteral "attribute-type"
   , idlType :: String
-  , baseName :: Maybe String
-  , prefix :: Maybe {value :: String, trivia :: String}
-  , postfix :: Maybe {value :: String, trivia :: String}
-  , separator :: Maybe {value :: String, trivia :: String}
-  , extAttrs :: Maybe RecExtendedAttributes
-  , trivia :: RecTrivia
-  }
+  )
 
 type RecIdlTypeAttributeCons =
-  { type :: StringLiteral "attribute-type"
-  , generic :: Maybe {value :: String, trivia :: RecTrivia}
-  , nullable :: Maybe {trivia :: String}
-  , union :: Maybe Boolean
+  RecIdlTypeCore
+  ( type :: StringLiteral "attribute-type"
   , idlType :: Array IdlType
-  , baseName :: Maybe String
-  , prefix :: Maybe {value :: String, trivia :: String}
-  , postfix :: Maybe {value :: String, trivia :: String}
-  , separator :: Maybe {value :: String, trivia :: String}
-  , extAttrs :: Maybe RecExtendedAttributes
-  , trivia :: RecTrivia
-  }
+  )
 
 type RecIdlTypeUnion =
   { union :: BooleanLiteral TB.True
@@ -142,45 +121,25 @@ type RecIdlTypeUnion =
   }
 
 type RecIdlTypeConst =
-  { type :: StringLiteral "const-type"
-  , generic :: Maybe {value :: String, trivia :: RecTrivia}
-  , nullable :: Maybe {trivia :: String}
-  , union :: Maybe Boolean
+  RecIdlTypeCore
+  ( type :: StringLiteral "const-type"
   , idlType :: String
-  , baseName :: Maybe String
-  , prefix :: Maybe {value :: String, trivia :: String}
-  , postfix :: Maybe {value :: String, trivia :: String}
-  , separator :: Maybe {value :: String, trivia :: String}
-  , extAttrs :: Maybe RecExtendedAttributes
-  , trivia :: RecTrivia
-  }
+  )
 
 type RecIdlTypeNull =
-  { generic :: Maybe {value :: String, trivia :: RecTrivia}
+  RecIdlTypeTail
+  ( generic :: Maybe {value :: String, trivia :: RecTrivia}
   , nullable :: Maybe {trivia :: String}
   , union :: BooleanLiteral TB.False
   , idlType :: String
   , baseName :: String
-  , prefix :: Maybe {value :: String, trivia :: String}
-  , postfix :: Maybe {value :: String, trivia :: String}
-  , separator :: Maybe {value :: String, trivia :: String}
-  , extAttrs :: Maybe RecExtendedAttributes
-  , trivia :: RecTrivia
-  }
+  )
 
 type RecIdlTypeDictionary =
-  { type :: StringLiteral "dictionary-type"
-  , generic :: Maybe {value :: String, trivia :: RecTrivia}
-  , nullable :: Maybe {trivia :: String}
-  , union :: Boolean
+  RecIdlTypeCore
+  ( type :: StringLiteral "dictionary-type"
   , idlType :: String
-  , baseName :: String
-  , prefix :: Maybe {value :: String, trivia :: String}
-  , postfix :: Maybe {value :: String, trivia :: String}
-  , separator :: Maybe {value :: String, trivia :: String}
-  , extAttrs :: Maybe RecExtendedAttributes
-  , trivia :: RecTrivia
-  }
+  )
 
 data IdlType
   = IdlTypeArgumentStr RecIdlTypeArgumentStr
